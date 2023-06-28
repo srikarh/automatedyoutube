@@ -35,8 +35,6 @@ def makeCompilation(path = "./",
                     introName = '',
                     outroName = '',
                     totalVidLength = 10*60,
-                    maxClipLength = 20,
-                    minClipLength = 5,
                     outputFile = "output.mp4"):
 
     allVideos = []
@@ -56,10 +54,9 @@ def makeCompilation(path = "./",
             clip = clip.resize(height=1080)
             duration = clip.duration
             print(duration)
-            if duration <= maxClipLength and duration >= minClipLength:
-                allVideos.append(clip)
-                seenLengths[duration].append(fileName)
-                totalLength += duration
+            allVideos.append(clip)
+            seenLengths[duration].append(fileName)
+            totalLength += duration
     
     print("Total Length: " + str(totalLength))
 
@@ -106,5 +103,4 @@ if __name__ == "__main__":
                     introName = "",
                     outroName = '',
                     totalVidLength = 10*60,
-                    maxClipLength = 20,
                     outputFile = "outputseq.mp4")

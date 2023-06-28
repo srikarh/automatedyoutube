@@ -37,22 +37,17 @@ IG_PASSWORD = config.IG_PASSWORD
 print(IG_USERNAME)
 print(IG_PASSWORD)
 
-
-
-version = open("version.txt").read()
-version = int(float(version))
-
-title = f"Daily Music Update (BEST concert videos, songs, and edits) V{version}"
 now = datetime.datetime.now()
 videoDirectory = "./music_updates_" + num_to_month[now.month].upper() + "_" + str(now.year) + "_V" + str(now.day) + "/"
 outputFile = "./" + num_to_month[now.month].upper() + "_" + str(now.year) + "_v" + str(now.day) + ".mp4"
 
 INTRO_VID = '' # SET AS '' IF YOU DONT HAVE ONE
 OUTRO_VID = ''
-TOTAL_VID_LENGTH = 60
-MAX_CLIP_LENGTH = 20
-MIN_CLIP_LENGTH = 5
-DAILY_SCHEDULED_TIME = "20:00"
+TOTAL_VID_LENGTH = 45
+MAX_CLIP_LENGTH = 25
+MIN_CLIP_LENGTH = 2
+FIRST_TIME = "11:00"
+SECOND_TIME = "23:00"
 TOKEN_NAME = "token.json" # Don't change
 
 # Setup Google 
@@ -85,31 +80,30 @@ def routine():
     if not os.path.exists(videoDirectory):
         os.makedirs(videoDirectory)
     
+    title = "Temp Title"
+    title += " #shorts"
     # Step 1: Scrape Videos
     print("Scraping Videos...")
-    scrapeVideos(username = IG_USERNAME,
+    tags = scrapeVideos(username = IG_USERNAME,
                  password = IG_PASSWORD,
-                 output_folder = videoDirectory,
-                  days=1, hours=0)
+                 output_folder = videoDirectory, MAX_CLIP_LENGTH = MAX_CLIP_LENGTH, MIN_CLIP_LENGTH = MIN_CLIP_LENGTH,
+                  days=0, hours=24)
     print("Scraped Videos!")
-    
+    tags.append("shorts")
     description = "Enjoy the updates! :) \n\n" \
     "like and subscribe to @TuneTrekz for more \n\n" \
-
+    
     # Step 2: Make Compilation
     print("Making Compilation...")
     makeCompilation(path = videoDirectory,
                     introName = INTRO_VID,
                     outroName = OUTRO_VID,
                     totalVidLength = TOTAL_VID_LENGTH,
-                    maxClipLength = MAX_CLIP_LENGTH,
-                    minClipLength = MIN_CLIP_LENGTH,
                     outputFile = outputFile)
     print("Made Compilation!")
     
     description += "\n\nCopyright Disclaimer, Under Section 107 of the Copyright Act 1976, allowance is made for 'fair use' for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favor of fair use.\n\n"
-    description += "#concerts #music #rap #musicupdates #live #shorts\n\n"
-    tags = ["concerts" "music" "rap" "musicupdates" "live" "shorts"]
+
     # Step 3: Upload to Youtube
     print("Uploading to Youtube...")
     uploadYtvid(VIDEO_FILE_NAME=outputFile,
@@ -117,8 +111,6 @@ def routine():
                 description=description, tags=tags,
                 googleAPI=googleAPI)
     print("Uploaded To Youtube!")
-    nextVersion = [version + 1]
-    np.savetxt("version.txt", nextVersion)
     # Step 4: Cleanup
     print("Removing temp files!")
     # Delete all files made:
@@ -141,7 +133,8 @@ def attemptRoutine():
             time.sleep(60*60)
 
 #attemptRoutine()
-schedule.every().day.at(DAILY_SCHEDULED_TIME).do(attemptRoutine)
+schedule.every().day.at(FIRST_TIME).do(attemptRoutine)
+schedule.every().day.at(SECOND_TIME).do(attemptRoutine)
 
 attemptRoutine()
 while True:

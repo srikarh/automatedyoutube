@@ -18,7 +18,7 @@ def uploadYtvid(VIDEO_FILE_NAME='',
             'tags': tags
         },
         'status': {
-            'privacyStatus': 'public',
+            'privacyStatus': 'private',
             'selfDeclaredMadeForKids': False, 
         },
         'notifySubscribers': True
