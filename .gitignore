@@ -1,4 +1,4 @@
-/config.py
 google/
-__pychache__/
-/googleAPI.json
+__pycache__/
+config.py
+googleAPI.json
