@@ -1,3 +1,0 @@
-[console_scripts]
-instalooter = instalooter.cli:main
-

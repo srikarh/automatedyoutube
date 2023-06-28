@@ -1,2 +1,0 @@
-IG_USERNAME = "scraper2023" 
-IG_PASSWORD = "Srikar$$2003"
