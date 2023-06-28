@@ -2,3 +2,4 @@ google/
 __pycache__/
 config.py
 googleAPI.json
+.DS_Store
